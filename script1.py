@@ -1,19 +1,32 @@
+from platform import release
 import time
 
 from tkinter.scrolledtext import ScrolledText
 
-def show_p(event) -> int:
+presses = []
+releases = []
+time_to_press = []
+times_between_keys = []
 
+def show_p(event):
+
+    presses.append(time.time_ns())
     print("Pressed Key", event.char, time.time_ns())
-    return time.time_ns()
 
-def show_r(event, _pressTime: int) -> int:
+def show_r(event):
 
-    btwPress_and_Rls = time_between()
+    releases.append(time.time_ns())
     print("Released Key", event.char, time.time_ns())
 
 def hello(event):
 
+    print("Current State of Data:")
+    for i in range(len(presses)):
+        time_to_press.append(releases[i] - presses[i])
+        print("The times a key was held down for in nanoseconds: {0} \n", time_to_press[i])
+    for i in range(1,len(presses)):
+        times_between_keys.append(presses[i] - releases[i-1])
+        print("The times between key presses in nanoseconds: {0} \n", times_between_keys[i-1])
     print("Single Click, Button-l")
 
 def quit(event):
@@ -22,16 +35,11 @@ def quit(event):
 
     import sys; sys.exit()
 
-def time_between(time1: int, time2: int) -> int:
-    print("Time between press and release: {0}", time2 - time1)
-    return time2 - time1
- 
-
 widget = ScrolledText(None)
 
 widget.pack()
 
-pressTime = widget.bind('<Key>', show_p)
+widget.bind('<Key>', show_p)
 
 widget.bind('<KeyRelease>', show_r)
 
