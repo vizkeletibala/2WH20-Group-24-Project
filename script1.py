@@ -3,30 +3,42 @@ import time
 
 from tkinter.scrolledtext import ScrolledText
 
-presses = []
+presses = [] 
 releases = []
 time_to_press = []
 times_between_keys = []
 
 def show_p(event):
 
-    presses.append(time.time_ns())
+    presses.append((event.char, time.time_ns()))
     print("Pressed Key", event.char, time.time_ns())
 
 def show_r(event):
 
-    releases.append(time.time_ns())
+    releases.append((event.char,time.time_ns()))
     print("Released Key", event.char, time.time_ns())
 
 def hello(event):
 
     print("Current State of Data:")
     for i in range(len(presses)):
-        time_to_press.append(releases[i] - presses[i])
-        print("The times a key was held down for in nanoseconds: {0} \n", time_to_press[i])
+        j = i
+        found = False
+        while j < len(releases) and not found:
+            if presses[i][0] == releases[j][0]:
+                time_to_press.append((presses[i][0],releases[j][1] - presses[i][1]))
+                found = True
+            j = j + 1
+        print("The times key was held down for in nanoseconds: \n", time_to_press[i])
     for i in range(1,len(presses)):
-        times_between_keys.append(presses[i] - releases[i-1])
-        print("The times between key presses in nanoseconds: {0} \n", times_between_keys[i-1])
+        j = i
+        found = False
+        while j < len(releases) and not found:
+            if presses[i][0] == releases[j][0]:
+                times_between_keys.append((presses[i][0],presses[j][1] - releases[i-1][1]))
+                found = True
+            j = j + 1
+        print("The time between two keypresses: \n", times_between_keys[i-1])
     print("Single Click, Button-l")
 
 def quit(event):
