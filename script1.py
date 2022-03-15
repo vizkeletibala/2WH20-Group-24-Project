@@ -29,7 +29,7 @@ def hello(event):
                 time_to_press.append((presses[i][0],releases[j][1] - presses[i][1]))
                 found = True
             j = j + 1
-        print("The times key was held down for in nanoseconds: \n", time_to_press[i])
+    print("The times key was held down for in nanoseconds: \n", time_to_press)    
     for i in range(1,len(presses)):
         j = i
         found = False
@@ -38,7 +38,7 @@ def hello(event):
                 times_between_keys.append((presses[i][0],presses[j][1] - releases[i-1][1]))
                 found = True
             j = j + 1
-        print("The time between two keypresses: \n", times_between_keys[i-1])
+    print("The time between two keypresses: \n", times_between_keys)
     print("Single Click, Button-l")
 
 def quit(event):
